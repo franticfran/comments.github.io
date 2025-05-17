@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社区帖子 - 智能音箱连接问题</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36CFC9',
+                        neutral: {
+                            100: '#F2F3F5',
+                            200: '#E5E6EB',
+                            300: '#C9CDD4',
+                            400: '#86909C',
+                            500: '#4E5969',
+                            600: '#272E3B',
+                            700: '#1D2129',
+                        },
+                        success: '#00B42A',
+                        warning: '#FF7D00',
+                        danger: '#F53F3F',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 14px 0 rgba(0, 0, 0, 0.06)',
+                        'hover': '0 4px 20px 0 rgba(0, 0, 0, 0.1)',
+                    }
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .animate-pulse-slow {
+                animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral-100 font-inter text-neutral-700 min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <button class="md:hidden text-neutral-500 hover:text-primary transition-colors">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <a href="#" class="flex items-center">
+                    <span class="text-primary text-2xl font-bold">Community</span>
+                </a>
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-primary font-medium">首页</a>
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors">发现</a>
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors">话题</a>
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors">消息</a>
+                </nav>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative hidden md:block">
+                    <input type="text" placeholder="搜索内容..." class="pl-10 pr-4 py-2 rounded-full bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary/30 w-64 transition-all">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"></i>
+                </div>
+                <button class="relative text-neutral-500 hover:text-primary transition-colors">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 bg-danger text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                </button>
+                <div class="relative group">
+                    <button class="flex items-center space-x-2">
+                        <img src="https://picsum.photos/id/64/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover border-2 border-white shadow-sm">
+                        <span class="hidden md:block text-sm font-medium">您</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-neutral-400"></i>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-card py-2 hidden group-hover:block transition-all duration-300 transform origin-top-right scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100">
+                        <a href="#" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">个人主页</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">我的帖子</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">设置</a>
+                        <div class="border-t border-neutral-200 my-1"></div>
+                        <a href="#" class="block px-4 py-2 text-sm text-danger hover:bg-neutral-100">退出登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-6 md:py-10">
+        <div class="flex flex-col md:flex-row gap-6">
+            <!-- 左侧边栏 -->
+            <aside class="w-full md:w-64 hidden md:block">
+                <div class="bg-white rounded-xl shadow-card p-4 mb-6">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="https://picsum.photos/id/64/200/200" alt="用户头像" class="h-12 w-12 rounded-full object-cover">
+                        <div>
+                            <h3 class="font-medium">您</h3>
+                            <p class="text-xs text-neutral-400">社区活跃用户</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-center mb-4">
+                        <div>
+                            <p class="font-medium">128</p>
+                            <p class="text-xs text-neutral-400">帖子</p>
+                        </div>
+                        <div>
+                            <p class="font-medium">324</p>
+                            <p class="text-xs text-neutral-400">关注</p>
+                        </div>
+                        <div>
+                            <p class="font-medium">1.5k</p>
+                            <p class="text-xs text-neutral-400">粉丝</p>
+                        </div>
+                    </div>
+                    <button class="w-full py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                        <i class="fa-solid fa-plus mr-1"></i> 发布帖子
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-card p-4">
+                    <h3 class="font-medium mb-3 flex items-center">
+                        <i class="fa-solid fa-fire text-danger mr-2"></i> 热门话题
+                    </h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#" class="flex items-center p-2 hover:bg-neutral-100 rounded-lg transition-colors">
+                                <span class="bg-primary/10 text-primary text-xs font-medium px-2 py-1 rounded-full mr-2">#智能家居</span>
+                                <span class="text-sm">12.5k 讨论</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center p-2 hover:bg-neutral-100 rounded-lg transition-colors">
+                                <span class="bg-secondary/10 text-secondary text-xs font-medium px-2 py-1 rounded-full mr-2">#科技生活</span>
+                                <span class="text-sm">8.3k 讨论</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center p-2 hover:bg-neutral-100 rounded-lg transition-colors">
+                                <span class="bg-warning/10 text-warning text-xs font-medium px-2 py-1 rounded-full mr-2">#数码产品</span>
+                                <span class="text-sm">6.7k 讨论</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center p-2 hover:bg-neutral-100 rounded-lg transition-colors">
+                                <span class="bg-danger/10 text-danger text-xs font-medium px-2 py-1 rounded-full mr-2">#AI助手</span>
+                                <span class="text-sm">5.2k 讨论</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- 中间内容区 -->
+            <div class="w-full md:flex-1">
+                <!-- 帖子卡片 -->
+                <article class="bg-white rounded-xl shadow-card p-6 mb-6 transform transition-all duration-300 hover:shadow-hover">
+                    <div class="flex items-start mb-4">
+                        <img src="https://picsum.photos/id/237/200/200" alt="用户头像" class="h-10 w-10 rounded-full object-cover mr-3">
+                        <div>
+                            <div class="flex items-center">
+                                <h3 class="font-medium">Yihao</h3>
+                                <span class="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">新用户</span>
+                            </div>
+                            <p class="text-xs text-neutral-400">2小时前 · 来自 移动端</p>
+                        </div>
+                        <button class="ml-auto text-neutral-400 hover:text-neutral-600 transition-colors">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-neutral-700 leading-relaxed">刚买的智能音箱连不上网，按照说明书操作了很多次还是失败……有没有人能帮帮我？</p>
+                    </div>
+                    
+                    <div class="flex items-center justify-between pt-4 border-t border-neutral-200">
+                        <div class="flex space-x-6">
+                            <button class="flex items-center text-neutral-500 hover:text-primary transition-colors" id="likeBtn">
+                                <i class="fa-regular fa-heart mr-1"></i>
+                                <span>32</span>
+                            </button>
+                            <button class="flex items-center text-neutral-500 hover:text-primary transition-colors">
+                                <i class="fa-regular fa-comment mr-1"></i>
+                                <span>4</span>
+                            </button>
+                            <button class="flex items-center text-neutral-500 hover:text-primary transition-colors">
+                                <i class="fa-regular fa-share-from-square mr-1"></i>
+                                <span>分享</span>
+                            </button>
+                        </div>
+                        <button class="text-neutral-500 hover:text-primary transition-colors">
+                            <i class="fa-regular fa-bookmark"></i>
+                        </button>
+                    </div>
+                </article>
+
+                <!-- 举报成功提示框 -->
+                <div id="reportToast" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-4 flex items-center w-[90%] max-w-md opacity-0 pointer-events-none transition-all duration-300 z-50">
+                    <div class="bg-success/10 p-2 rounded-full mr-3">
+                        <i class="fa-solid fa-check text-success"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-sm">举报成功</h4>
+                        <p class="text-xs text-neutral-500">已收到您的反馈，我们将在24小时内处理。您的举动帮助我们维护了良好社区秩序。</p>
+                    </div>
+                    <button onclick="document.getElementById('reportToast').classList.add('opacity-0')" class="text-neutral-400 hover:text-neutral-600">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- 评论区 -->
+                <div class="bg-white rounded-xl shadow-card p-6 mb-6">
+                    <h3 class="font-medium mb-4 flex items-center">
+                        <i class="fa-regular fa-comment text-primary mr-2"></i> 评论 (4)
+                    </h3>
+                    
+                    <!-- 评论列表 -->
+                    <div class="space-y-5" id="commentsContainer">
+                        <!-- 评论1 -->
+                        <div class="flex space-x-3">
+                            <img src="https://picsum.photos/id/1027/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                            <div class="flex-1">
+                                <div class="bg-neutral-100 rounded-lg p-3">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="font-medium text-sm">Erhao</h4>
+                                        <button class="text-xs text-neutral-400 hover:text-danger transition-colors report-btn">
+                                            <i class="fa-regular fa-flag mr-0.5"></i> 举报
+                                        </button>
+                                    </div>
+                                    <p class="text-sm">好蠢</p>
+                                </div>
+                                <div class="flex items-center mt-2 text-xs text-neutral-400">
+                                    <span>1小时前</span>
+                                    <button class="ml-3 hover:text-primary transition-colors like-comment-btn">
+                                        <i class="fa-regular fa-heart mr-0.5"></i>
+                                        <span>2</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 评论2 -->
+                        <div class="flex space-x-3">
+                            <img src="https://picsum.photos/id/1012/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                            <div class="flex-1">
+                                <div class="bg-neutral-100 rounded-lg p-3">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="font-medium text-sm">Sanhao</h4>
+                                        <button class="text-xs text-neutral-400 hover:text-danger transition-colors report-btn">
+                                            <i class="fa-regular fa-flag mr-0.5"></i> 举报
+                                        </button>
+                                    </div>
+                                    <p class="text-sm">我以前也遇到过这个问题，很多智能设备可能并不那么简单，有些人有点过分了吧</p>
+                                </div>
+                                <div class="flex items-center mt-2 text-xs text-neutral-400">
+                                    <span>50分钟前</span>
+                                    <button class="ml-3 hover:text-primary transition-colors like-comment-btn">
+                                        <i class="fa-regular fa-heart mr-0.5"></i>
+                                        <span>12</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 评论3 -->
+                        <div class="flex space-x-3">
+                            <img src="https://picsum.photos/id/1025/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                            <div class="flex-1">
+                                <div class="bg-neutral-100 rounded-lg p-3">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="font-medium text-sm">Sihao</h4>
+                                        <button class="text-xs text-neutral-400 hover:text-danger transition-colors report-btn">
+                                            <i class="fa-regular fa-flag mr-0.5"></i> 举报
+                                        </button>
+                                    </div>
+                                    <p class="text-sm">这都搞不定?智商是负数吧.……这种给正常人用的东西东西可能不太适合你</p>
+                                </div>
+                                <div class="flex items-center mt-2 text-xs text-neutral-400">
+                                    <span>45分钟前</span>
+                                    <button class="ml-3 hover:text-primary transition-colors like-comment-btn">
+                                        <i class="fa-regular fa-heart mr-0.5"></i>
+                                        <span>5</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 评论4 -->
+                        <div class="flex space-x-3">
+                            <img src="https://picsum.photos/id/1074/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                            <div class="flex-1">
+                                <div class="bg-neutral-100 rounded-lg p-3">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="font-medium text-sm">Wuhao</h4>
+                                        <button class="text-xs text-neutral-400 hover:text-danger transition-colors report-btn">
+                                            <i class="fa-regular fa-flag mr-0.5"></i> 举报
+                                        </button>
+                                    </div>
+                                    <p class="text-sm">在这里问没人会帮你</p>
+                                </div>
+                                <div class="flex items-center mt-2 text-xs text-neutral-400">
+                                    <span>30分钟前</span>
+                                    <button class="ml-3 hover:text-primary transition-colors like-comment-btn">
+                                        <i class="fa-regular fa-heart mr-0.5"></i>
+                                        <span>3</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 评论框 -->
+                    <div class="mt-8">
+                        <div class="relative mb-3">
+                            <div class="absolute top-0 left-0 transform -translate-y-1/2 -translate-x-1/2 text-4xl text-primary animate-pulse-slow">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="flex space-x-3">
+                            <img src="https://picsum.photos/id/64/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                            <div class="flex-1">
+                                <textarea id="commentInput" placeholder="Ta感受如何？你的友善评论十分重要，对Yihao发表你的感受。" class="w-full p-3 bg-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all resize-none min-h-[100px]"></textarea>
+                                <div class="flex justify-between items-center mt-3">
+                                    <div class="flex space-x-3">
+                                        <button class="text-neutral-500 hover:text-primary transition-colors">
+                                            <i class="fa-regular fa-image"></i>
+                                        </button>
+                                        <button class="text-neutral-500 hover:text-primary transition-colors">
+                                            <i class="fa-regular fa-smile"></i>
+                                        </button>
+                                        <button class="text-neutral-500 hover:text-primary transition-colors">
+                                            <i class="fa-regular fa-gif"></i>
+                                        </button>
+                                    </div>
+                                    <button id="postCommentBtn" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                                        发布评论
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧边栏 -->
+            <aside class="w-full md:w-72 hidden lg:block">
+                <div class="bg-white rounded-xl shadow-card p-4 mb-6">
+                    <h3 class="font-medium mb-3">相关帖子</h3>
+                    <div class="space-y-4">
+                        <a href="#" class="block group">
+                            <div class="flex space-x-3">
+                                <img src="https://picsum.photos/id/180/200/200" alt="帖子图片" class="h-16 w-16 rounded-lg object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium line-clamp-2 group-hover:text-primary transition-colors">智能音箱常见问题及解决方法大全</h4>
+                                    <p class="text-xs text-neutral-400 mt-1">3.2k 浏览 · 56 评论</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#" class="block group">
+                            <div class="flex space-x-3">
+                                <img src="https://picsum.photos/id/160/200/200" alt="帖子图片" class="h-16 w-16 rounded-lg object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium line-clamp-2 group-hover:text-primary transition-colors">WiFi连接不上？这些方法或许能帮到你</h4>
+                                    <p class="text-xs text-neutral-400 mt-1">1.8k 浏览 · 32 评论</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#" class="block group">
+                            <div class="flex space-x-3">
+                                <img src="https://picsum.photos/id/119/200/200" alt="帖子图片" class="h-16 w-16 rounded-lg object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium line-clamp-2 group-hover:text-primary transition-colors">智能家居设备推荐与使用心得</h4>
+                                    <p class="text-xs text-neutral-400 mt-1">5.7k 浏览 · 124 评论</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-card p-4">
+                    <h3 class="font-medium mb-3">推荐关注</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://picsum.photos/id/1062/200/200" alt="用户头像" class="h-10 w-10 rounded-full object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium">智能家居达人</h4>
+                                    <p class="text-xs text-neutral-400">数码科技博主</p>
+                                </div>
+                            </div>
+                            <button class="text-xs px-3 py-1 border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition-colors">
+                                关注
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://picsum.photos/id/1074/200/200" alt="用户头像" class="h-10 w-10 rounded-full object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium">WiFi工程师</h4>
+                                    <p class="text-xs text-neutral-400">网络技术专家</p>
+                                </div>
+                            </div>
+                            <button class="text-xs px-3 py-1 border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition-colors">
+                                关注
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://picsum.photos/id/1066/200/200" alt="用户头像" class="h-10 w-10 rounded-full object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium">科技小助手</h4>
+                                    <p class="text-xs text-neutral-400">智能设备顾问</p>
+                                </div>
+                            </div>
+                            <button class="text-xs px-3 py-1 border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition-colors">
+                                关注
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-neutral-200 py-6 mt-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <a href="#" class="text-primary text-xl font-bold">Community</a>
+                    <p class="text-sm text-neutral-500 mt-1">连接有共同兴趣的人们</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors">
+                        <i class="fa-brands fa-weibo text-xl"></i>
+                    </a>
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors">
+                        <i class="fa-brands fa-wechat text-xl"></i>
+                    </a>
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors">
+                        <i class="fa-brands fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors">
+                        <i class="fa-brands fa-instagram text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-neutral-200 mt-6 pt-6 text-center text-sm text-neutral-500">
+                <p>© 2025 Community. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 点赞功能
+        const likeBtn = document.getElementById('likeBtn');
+        let isLiked = false;
+        
+        likeBtn.addEventListener('click', () => {
+            isLiked = !isLiked;
+            if (isLiked) {
+                likeBtn.innerHTML = '<i class="fa-solid fa-heart mr-1"></i><span>33</span>';
+                likeBtn.classList.add('text-danger');
+                likeBtn.classList.remove('text-neutral-500');
+            } else {
+                likeBtn.innerHTML = '<i class="fa-regular fa-heart mr-1"></i><span>32</span>';
+                likeBtn.classList.remove('text-danger');
+                likeBtn.classList.add('text-neutral-500');
+            }
+        });
+        
+        // 评论点赞功能
+        const likeCommentBtns = document.querySelectorAll('.like-comment-btn');
+        
+        likeCommentBtns.forEach(btn => {
+            let isLiked = false;
+            const countSpan = btn.querySelector('span');
+            const count = parseInt(countSpan.textContent);
+            
+            btn.addEventListener('click', () => {
+                isLiked = !isLiked;
+                
+                if (isLiked) {
+                    btn.innerHTML = `<i class="fa-solid fa-heart mr-0.5"></i> <span>${count + 1}</span>`;
+                    btn.classList.add('text-danger');
+                    btn.classList.remove('text-neutral-400');
+                } else {
+                    btn.innerHTML = `<i class="fa-regular fa-heart mr-0.5"></i> <span>${count}</span>`;
+                    btn.classList.remove('text-danger');
+                    btn.classList.add('text-neutral-400');
+                }
+            });
+        });
+        
+        // 举报功能
+        const reportBtns = document.querySelectorAll('.report-btn');
+        const reportToast = document.getElementById('reportToast');
+
+        reportBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 显示举报提示
+                reportToast.classList.remove('opacity-0');
+                
+                // 3秒后隐藏提示
+                setTimeout(() => {
+                    reportToast.classList.add('opacity-0');
+                }, 3000);
+            });
+        });
+        
+        // 发布评论功能
+        const commentInput = document.getElementById('commentInput');
+        const postCommentBtn = document.getElementById('postCommentBtn');
+        const commentsContainer = document.getElementById('commentsContainer');
+        
+        postCommentBtn.addEventListener('click', () => {
+            const commentText = commentInput.value.trim();
+            
+            if (commentText) {
+                // 创建新评论元素
+                const newComment = document.createElement('div');
+                newComment.className = 'flex space-x-3 opacity-0 transform translate-y-4 transition-all duration-300';
+                newComment.innerHTML = `
+                    <img src="https://picsum.photos/id/64/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                    <div class="flex-1">
+                        <div class="bg-primary/5 rounded-lg p-3 border-l-2 border-primary">
+                            <div class="flex items-center justify-between mb-1">
+                                <h4 class="font-medium text-sm">您</h4>
+                                <button class="text-xs text-neutral-400 hover:text-danger transition-colors report-btn">
+                                    <i class="fa-regular fa-flag mr-0.5"></i> 举报
+                                </button>
+                            </div>
+                            <p class="text-sm">${commentText}</p>
+                        </div>
+                        <div class="flex items-center mt-2 text-xs text-neutral-400">
+                            <span>刚刚</span>
+                            <button class="ml-3 hover:text-primary transition-colors like-comment-btn">
+                                <i class="fa-regular fa-heart mr-0.5"></i>
+                                <span>0</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // 添加到评论列表顶部
+                commentsContainer.insertBefore(newComment, commentsContainer.firstChild);
+                
+                // 清空输入框
+                commentInput.value = '';
+                
+                // 为新评论添加动画
+                setTimeout(() => {
+                    newComment.classList.remove('opacity-0', 'translate-y-4');
+                }, 10);
+                
+                // 为新评论的点赞按钮添加事件
+                const newLikeBtn = newComment.querySelector('.like-comment-btn');
+                newLikeBtn.addEventListener('click', function() {
+                    let isLiked = false;
+                    const countSpan = this.querySelector('span');
+                    const count = parseInt(countSpan.textContent);
+                    
+                    return function() {
+                        isLiked = !isLiked;
+                        
+                        if (isLiked) {
+                            this.innerHTML = `<i class="fa-solid fa-heart mr-0.5"></i> <span>${count + 1}</span>`;
+                            this.classList.add('text-danger');
+                            this.classList.remove('text-neutral-400');
+                        } else {
+                            this.innerHTML = `<i class="fa-regular fa-heart mr-0.5"></i> <span>${count}</span>`;
+                            this.classList.remove('text-danger');
+                            this.classList.add('text-neutral-400');
+                        }
+                    };
+                }());
+                
+                // 为新评论的举报按钮添加事件
+                const newReportBtn = newComment.querySelector('.report-btn');
+                newReportBtn.addEventListener('click', function() {
+                    // 显示举报成功提示
+                    reportToast.classList.remove('opacity-0');
+                    
+                    // 3秒后隐藏提示框
+                    setTimeout(() => {
+                        reportToast.classList.add('opacity-0');
+                    }, 3000);
+                });
+            }
+        });
+        
+        // 页面滚动效果
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-md');
+                header.classList.remove('shadow-sm');
+            } else {
+                header.classList.remove('shadow-md');
+                header.classList.add('shadow-sm');
+            }
+        });
+    </script>
+</body>
+</html>    
